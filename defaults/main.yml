@@ -1,2 +1,4 @@
 ---
 # defaults file for docker
+dockerengine_state: started
+dockerengine_enabled: yes
