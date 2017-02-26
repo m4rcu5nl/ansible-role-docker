@@ -1,9 +1,24 @@
 ---
 # tasks file for docker-engine
 
-- block: # Check for repositories and add missing ones accordingly 
+- block: # Make sure we have the repositories we need 
 
-  - include: "{{ ansible_distribution }}-repos.yml"
+  - name: 'Add Epel repo (the easy way)'
+    package:
+      name: epel-release
+      state: present
+    when: 
+      - "ansible_distribution == 'CentOS'"
+      - "ansible_distribution_major_version >= 6"
+    register: epelrepo
+
+  - name: 'Add Docker repo'
+    template: 
+      src: "{{ ansible_distribution }}-docker-repo.j2" 
+      dest: /etc/yum.repos.d/docker.repo 
+      owner: root 
+      group: root
+    register: dockerrepo
 
   become: true
   become_user: root
@@ -11,9 +26,9 @@
     - installation
     - repositories
 
-- block: # Install packages
+- block: # Install required packages
   
-  - name: Install docker-engine and python-pip from repos
+  - name: 'Install docker-engine and python-pip from repos'
     package:
       name: "{{ item }}"
       state: present
@@ -25,12 +40,12 @@
       - dockerrepo|succeeded
     register: installedfromrepo
 
-  - name: Self-upgrade Pip
+  - name: 'Self-upgrade Pip'
     pip:
       name: pip
       state: latest
 
-  - name: Install docker-py and docker-compose from Pip
+  - name: 'Install docker-py and docker-compose from Pip'
     pip:
       name: "{{ item }}"
       state: present
@@ -44,9 +59,12 @@
     - installation
     - packages
 
-- name: Start and enable Docker service
+- name: 'Set docker service state'
   service:
     name: docker
     state: "{{ dockerengine_state }}"
     enabled: "{{ dockerengine_enabled }}"
-  
+  become: true
+  become_user: root
+  tags:
+    - services
