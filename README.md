@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/m4rcu5nl/ansible-role-docker.svg?branch=develop)](https://travis-ci.org/m4rcu5nl/ansible-role-docker)    
+[![Build Status](https://travis-ci.org/m4rcu5nl/ansible-role-docker.svg?branch=master)](https://travis-ci.org/m4rcu5nl/ansible-role-docker)    
 
 docker-engine
 =========
