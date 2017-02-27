@@ -1,5 +1,22 @@
 ---
 # tasks file for docker-engine
+- block: # Make sure some packages from RH's repos are not installed.
+
+  - name: 'Remove pre-installed version of Docker and some conflicting packages'
+    package:
+      name: "{{ item }}"
+      state: absent
+    with_items:
+      - docker
+      - docker-common
+      - container-selinux
+      - docker-selinux
+
+  become: true
+  become_user: root
+  tags:
+    - packages
+    - pre-installation
 
 - block: # Make sure we have the repositories we need 
 
@@ -28,7 +45,7 @@
 
 - block: # Install required packages
   
-  - name: 'Install docker-engine and python-pip from repos'
+  - name: 'Install docker-engine and python-pip from yum repos'
     package:
       name: "{{ item }}"
       state: present
