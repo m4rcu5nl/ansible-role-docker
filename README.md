@@ -1,11 +1,11 @@
-[![Build Status](https://travis-ci.org/m4rcu5nl/ansible-role-docker.svg?branch=master)](https://travis-ci.org/m4rcu5nl/ansible-role-docker)    
+[![Build Status](https://travis-ci.org/m4rcu5nl/ansible-role-docker.svg?branch=master)](https://travis-ci.org/m4rcu5nl/ansible-role-docker) [![GitHub issues](https://img.shields.io/github/issues/m4rcu5nl/ansible-role-docker.svg)](https://github.com/m4rcu5nl/ansible-role-docker/issues) 
 
 docker-engine
 =========
 
 Ansible role to install Docker as discribed on [https://docs.docker.com/engine/installation/linux/centos/](https://docs.docker.com/engine/installation/linux/centos/).    
 
-Currently only tested on a fresh DO Droplet running CentOS 7.
+Additionally installs docker-compose version 1.9.0 using Pip to maintain compatibility with Ansible.
 
 Role Variables
 --------------
