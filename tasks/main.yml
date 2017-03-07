@@ -62,13 +62,13 @@
       name: pip
       state: latest
 
-  - name: 'Install docker-py and docker-compose from Pip'
+  # Specifically install docker-compose 1.9.0 to avoid errors when working 
+  # with the Docker module in current Ansible release.
+  - name: Install docker-compose version 1.9.0 using pip
     pip:
-      name: "{{ item }}"
+      name: docker-compose
       state: present
-    with_items:
-      - "docker-py"
-      - "docker-compose"
+      version: '1.9.0'
 
   become: true
   become_user: root
