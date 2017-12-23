@@ -20,18 +20,9 @@
 
 - block: # Make sure we have the repositories we need
 
-  - name: 'Add Epel repo (the easy way)'
-    package:
-      name: epel-release
-      state: present
-    when:
-      - "ansible_distribution == 'CentOS'"
-      - "ansible_distribution_major_version >= 7"
-    register: epelrepo
-
   - name: 'Add Docker repo'
     template:
-      src: "{{ ansible_distribution }}-docker-ce-repo.j2"
+      src: "{{ ansible_distribution }}7-docker-ce-repo.j2"
       dest: /etc/yum.repos.d/docker.repo
       owner: root
       group: root
@@ -45,30 +36,16 @@
 
 - block: # Install required packages
 
-  - name: 'Install docker-engine and python-pip from yum repos'
+  - name: 'Install docker-ce and docker-ce-selinux from yum repo'
     package:
       name: "{{ item }}"
       state: present
     with_items:
-      - "docker-engine"
-      - "python-pip"
+      - "docker-ce"
+      - "docker-ce-selinux"
     when:
-      - epelrepo|succeeded
       - dockerrepo|succeeded
     register: installedfromrepo
-
-  - name: 'Self-upgrade Pip'
-    pip:
-      name: pip
-      state: latest
-
-  # Specifically install docker-compose 1.9.0 to avoid errors when working
-  # with the Docker module in current Ansible release.
-  - name: Install docker-compose version 1.9.0 using pip
-    pip:
-      name: docker-compose
-      state: present
-      version: '1.9.0'
 
   become: true
   become_user: root
