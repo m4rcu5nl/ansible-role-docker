@@ -2,7 +2,7 @@
 # tasks file for docker-engine
 - block: # Make sure some packages from RH's repos are not installed.
 
-  - name: 'Remove pre-installed version of Docker and some conflicting packages'
+  - name: Remove pre-installed version of Docker and some conflicting packages
     package:
       name: "{{ item }}"
       state: absent
@@ -20,7 +20,7 @@
 
 - block: # Make sure we have the repositories we need
 
-  - name: 'Add Docker repo'
+  - name: Add Docker repo
     template:
       src: "{{ ansible_distribution }}{{ ansible_distribution_major_version }}-docker-ce-repo.j2"
       dest: /etc/yum.repos.d/docker.repo
@@ -36,14 +36,14 @@
 
 - block: # Install required packages
 
-  - name: 'Install packages from yum repo'
+  - name: Install packages from yum repo
     package:
       name: "{{ item }}"
       state: present
     with_items:
-      - "docker-ce"
-      - "docker-ce-selinux"
-      - "python-pip"
+      - docker-ce
+      - docker-ce-selinux
+      - python-pip
     when:
       - dockerrepo|succeeded
 
@@ -60,7 +60,7 @@
     - installation
     - packages
 
-- name: 'Set docker service state'
+- name: Set docker service state
   service:
     name: docker
     state: "{{ dockerengine_state }}"
