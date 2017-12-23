@@ -46,10 +46,11 @@
 
   - name: Install packages from pip
     pip:
-      name: "{{ item }}"
-      state: present
+      name: "{{ item.name }}"
+      state: "{{ item.state }}"
     with_items:
-      - docker-py
+      - { name: docker-py, state: present }
+      - { name: pip, state: latest }
 
   become: true
   become_user: root
